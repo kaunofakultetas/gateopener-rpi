@@ -3,13 +3,15 @@ services:
   gateopener-rpi:
     container_name: gateopener-rpi
     image: gateopener-rpi
+    user: root
     build:
       context: ./gateopener-rpi
     ports:
       - "8000:8000"
     environment:
       - APP_DEBUG=false
+    volumes:
+      - ./DATA:/data
     devices:
       - /dev/gpiomem:/dev/gpiomem
-      - /dev/mem:/dev/mem
     restart: unless-stopped

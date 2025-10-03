@@ -45,7 +45,7 @@ def open_HTTPGET():
     GPIO.output(17, GPIO.HIGH)
     Path('OPENED').touch(exist_ok=True)
 
-    with open("openings.txt", "a") as f:
+    with open("/data/openings.txt", "a") as f:
         timeNow = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         f.write(timeNow + ":" + numberplate + "\n")
 
