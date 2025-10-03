@@ -2,6 +2,7 @@ services:
 
   gateopener-rpi:
     container_name: gateopener-rpi
+    image: gateopener-rpi
     build:
       context: ./gateopener-rpi
     ports:
