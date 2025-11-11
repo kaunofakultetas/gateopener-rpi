@@ -11,7 +11,25 @@ services:
     environment:
       - APP_DEBUG=false
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./DATA:/data
     devices:
       - /dev/gpiomem:/dev/gpiomem
     restart: unless-stopped
+
+
+  gateopener-sender:
+    container_name: gateopener-sender
+    image: gateopener-sender
+    user: root
+    build:
+      context: ./sender
+    environment:
+      - OPENINGS_LOG_API_URL=http://<data-collection-service>/api/gateopenings
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./DATA:/data
+    restart: unless-stopped
+
+
+
