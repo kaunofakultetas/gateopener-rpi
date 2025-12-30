@@ -6,6 +6,7 @@ import hashlib
 import random
 from flask import Flask, request, jsonify, make_response, Response, redirect
 from flask_cors import CORS
+from functools import wraps
 from threading import Thread, Lock
 from pathlib import Path
 from datetime import datetime, date, timedelta
@@ -13,6 +14,7 @@ from datetime import datetime, date, timedelta
 
 
 APP_DEBUG = os.getenv('APP_DEBUG', 'false').lower() == "true"
+GATEOPENER_API_KEY = os.getenv('GATEOPENER_API_KEY', '')
 
 
 
@@ -30,10 +32,33 @@ else:
 
 
 
+def apikey_required(env_var_name):
+    """
+    Decorator that validates X-API-Key header against an environment variable.
+    Usage: @apikey_required('GATEOPENER_API_KEY')
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            expected_key = os.getenv(env_var_name)
+            if not expected_key:
+                return jsonify({'message': f'Server error: {env_var_name} not configured'}), 500
+            
+            provided_key = request.headers.get('X-API-Key')
+            if not provided_key or provided_key != expected_key:
+                return jsonify({'message': 'Unauthorized: Invalid API key'}), 401
+            
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+
 
 
 
 @app.route('/open', methods=['GET'])
+@apikey_required('GATEOPENER_API_KEY')
 def open_HTTPGET():
     args = request.args
     

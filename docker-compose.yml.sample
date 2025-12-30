@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     environment:
       - APP_DEBUG=false
+      - GATEOPENER_API_KEY=your-api-key
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./DATA:/data
@@ -26,6 +27,7 @@ services:
       context: ./sender
     environment:
       - OPENINGS_LOG_API_URL=http://<data-collection-service>/api/gateopenings
+      - GATEOPENER_API_KEY=your-api-key
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./DATA:/data

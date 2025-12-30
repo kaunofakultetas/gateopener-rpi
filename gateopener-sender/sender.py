@@ -6,6 +6,8 @@ import os
 
 OPENINGS_LOG_API_URL = os.getenv('OPENINGS_LOG_API_URL')
 LOG_FILE_PATH = os.getenv('LOG_FILE_PATH', '/data/openings.txt')
+GATEOPENER_API_KEY = os.getenv('GATEOPENER_API_KEY', '')
+
 
 
 while True:
@@ -21,7 +23,7 @@ while True:
 
 
     print("[*] Sending openings...")
-    response = requests.post(OPENINGS_LOG_API_URL, json=toSendJson)
+    response = requests.post(OPENINGS_LOG_API_URL, json=toSendJson, headers={'X-API-Key': GATEOPENER_API_KEY})
     print(response)
 
     print("[*] Sleeping for 15 minutes...\n")
